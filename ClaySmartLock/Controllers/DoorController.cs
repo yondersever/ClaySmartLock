@@ -1,6 +1,7 @@
 ﻿using ClaySmartLock.Model.Contract;
 using ClaySmartLock.Model.Service.Door;
 using ClaySmartLock.Service.Interface;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -19,8 +20,6 @@ namespace ClaySmartLock.Controllers
         private IUserService _userService;
         private IDoorRightService _doorRightService;
 
-        private const string _forbiddenMessage = "You don't have enought rights for this door";
-        private const string _successMessage = "Operation successfully completed";
 
         public DoorController(IDoorService doorService, IUserService userService, IDoorRightService doorRightService)
         {
@@ -31,38 +30,40 @@ namespace ClaySmartLock.Controllers
 
 
         [HttpPost("unlock")]
-        public IActionResult UnLock([FromBody] DoorUnLockRequest request)
+        public async Task<ActionResult<DoorUnLockResponse>> UnLock([FromBody] DoorUnLockRequest request)
         {
-            if (!_doorRightService.HasUserRightForDoor(_userService.GetAuthenticatedUser().ID, request.DoorID))
-                return Forbid(_forbiddenMessage);
+            bool hasRight = await _doorRightService.HasUserRightForDoor(_userService.GetAuthenticatedUser().ID, request.DoorID);
+            if (!hasRight)
+                return StatusCode(StatusCodes.Status403Forbidden);
 
             DoorUnlockServiceRequest doorUnlockServiceRequest = new DoorUnlockServiceRequest 
             { 
-                DoorID = request.DoorID 
+                DoorID = request.DoorID
             };
 
-            DoorUnlockServiceResponse doorUnlockServiceResponse = _doorService.UnLockDoor(doorUnlockServiceRequest);
+            DoorUnlockServiceResponse doorUnlockServiceResponse = await _doorService.UnLockDoor(doorUnlockServiceRequest);
 
             DoorUnLockResponse response = new DoorUnLockResponse
             {
-                Message = _successMessage
+                Message = doorUnlockServiceResponse.Message
             };
 
             return Ok(response);
         }
 
         [HttpPost("lock")]
-        public IActionResult Lock([FromBody] DoorUnLockRequest request)
+        public async Task<ActionResult<DoorLockResponse>> Lock([FromBody] DoorUnLockRequest request)
         {
-            if (!_doorRightService.HasUserRightForDoor(_userService.GetAuthenticatedUser().ID, request.DoorID))
-                return Forbid(_forbiddenMessage);
+            bool hasRight = await _doorRightService.HasUserRightForDoor(_userService.GetAuthenticatedUser().ID, request.DoorID);
+            if (!hasRight)
+                return StatusCode(StatusCodes.Status403Forbidden);
 
             DoorLockServiceRequest doorLockServiceRequest = new DoorLockServiceRequest
             {
                 DoorID = request.DoorID
             };
 
-            DoorLockServiceResponse doorLockServiceResponse = _doorService.LockDoor(doorLockServiceRequest);
+            DoorLockServiceResponse doorLockServiceResponse = await _doorService.LockDoor(doorLockServiceRequest);
 
             DoorLockResponse response = new DoorLockResponse
             {

@@ -8,6 +8,6 @@ namespace ClaySmartLock.Service.Interface
 {
     public interface IDoorRightService
     {
-        bool HasUserRightForDoor(long userID, long doorID);
+        Task<bool> HasUserRightForDoor(long userID, long doorID);
     }
 }

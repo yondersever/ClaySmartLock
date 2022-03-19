@@ -8,6 +8,6 @@ namespace ClaySmartLock.Model.Service.Door
 {
     public class DoorUnlockServiceResponse
     {
-        public bool IsSuccess { get; set; }
+        public string Message { get; set; }
     }
 }

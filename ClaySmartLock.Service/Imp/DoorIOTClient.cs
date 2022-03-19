@@ -1,8 +1,10 @@
 ﻿using ClaySmartLock.Model.Contract.DoorIOTClient;
 using ClaySmartLock.Service.Interface;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,18 +13,32 @@ namespace ClaySmartLock.Service.Imp
     // Mock client
     public class DoorIOTClient : IDoorIOTClient
     {
-        public DoorIOTClientLockResponse LockDoor(DoorIOTClientLockRequest request)
+        static HttpClient client = new HttpClient();
+
+        private readonly IConfiguration _configuration;
+
+        public DoorIOTClient(IConfiguration configuration)
         {
-            DoorIOTClientLockResponse response = new DoorIOTClientLockResponse();
-            response.Message = "Door Locked.";
-            return response;
+            _configuration = configuration;
         }
 
-        public DoorIOTClientUnLockResponse UnLockDoor(DoorIOTClientUnLockRequest request)
+        public async Task<DoorIOTClientUnLockResponse> UnLockDoor(DoorIOTClientUnLockRequest request)
         {
-            DoorIOTClientUnLockResponse response = new DoorIOTClientUnLockResponse();
-            response.Message = "Door Unlocked.";
-            return response;
+            string endpoint = _configuration.GetSection("Endpoints").GetSection("doorIOTUnLockService").Value;
+            HttpResponseMessage httpResponse = await client.PostAsJsonAsync(endpoint, request);
+            httpResponse.EnsureSuccessStatusCode();
+
+            return await httpResponse.Content.ReadAsAsync<DoorIOTClientUnLockResponse>();
         }
+
+        public async Task<DoorIOTClientLockResponse> LockDoor(DoorIOTClientLockRequest request)
+        {
+            string endpoint = _configuration.GetSection("Endpoints").GetSection("doorIOTLockService").Value;
+            HttpResponseMessage httpResponse = await client.PostAsJsonAsync(endpoint, request);
+            httpResponse.EnsureSuccessStatusCode();
+
+            return await httpResponse.Content.ReadAsAsync<DoorIOTClientLockResponse>();
+        }
+
     }
 }

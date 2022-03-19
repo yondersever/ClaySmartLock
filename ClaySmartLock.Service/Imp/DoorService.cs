@@ -1,4 +1,5 @@
 ﻿using ClaySmartLock.Model.Contract.DoorIOTClient;
+using ClaySmartLock.Model.DTO;
 using ClaySmartLock.Model.Enum;
 using ClaySmartLock.Model.Service.Door;
 using ClaySmartLock.Model.Service.DoorHistory;
@@ -24,7 +25,7 @@ namespace ClaySmartLock.Service.Imp
             _userService = userService;
         }
        
-        public DoorUnlockServiceResponse UnLockDoor(DoorUnlockServiceRequest request)
+        public async Task<DoorUnlockServiceResponse> UnLockDoor(DoorUnlockServiceRequest request)
         {
             DoorUnlockServiceResponse response = new DoorUnlockServiceResponse();
 
@@ -33,15 +34,14 @@ namespace ClaySmartLock.Service.Imp
                 DoorID = request.DoorID
             };
 
-            DoorIOTClientUnLockResponse doorIOTClientUnLockResponse = _doorIOTClient.UnLockDoor(doorIOTClientUnLockRequest);
+            await _doorIOTClient.UnLockDoor(doorIOTClientUnLockRequest);
+            await InsertHistory(request.DoorID, DoorHistoryActionEnum.UnLock);
 
-            InsertHistory(request.DoorID, DoorHistoryActionEnum.UnLock);
-
-            response.IsSuccess = true;
+            response.Message = "Door unlocked.";
             return response;
         }
 
-        public DoorLockServiceResponse LockDoor(DoorLockServiceRequest request)
+        public async Task<DoorLockServiceResponse> LockDoor(DoorLockServiceRequest request)
         {
             DoorLockServiceResponse response = new DoorLockServiceResponse();
 
@@ -50,24 +50,25 @@ namespace ClaySmartLock.Service.Imp
                 DoorID = request.DoorID
             };
 
-            DoorIOTClientLockResponse doorIOTClientLockResponse = _doorIOTClient.LockDoor(doorIOTClientLockRequest);
+            await _doorIOTClient.LockDoor(doorIOTClientLockRequest);
+            await InsertHistory(request.DoorID, DoorHistoryActionEnum.Lock);
 
-            InsertHistory(request.DoorID, DoorHistoryActionEnum.Lock);
-
-            response.IsSuccess = true;
+            response.Message = "Door locked.";
             return response;
         }
 
-        private void InsertHistory(long doorID, DoorHistoryActionEnum action)
+        private async Task InsertHistory(long doorID, DoorHistoryActionEnum action)
         {
+            UserInfoDTO userInfo = _userService.GetAuthenticatedUser();
+
             InsertDoorHistoryServiceRequest insertDoorHistoryServiceRequest = new InsertDoorHistoryServiceRequest
             {
                 DoorID = doorID,
                 Action = action,
-                UserID = _userService.GetAuthenticatedUser().ID
+                UserID = userInfo.ID
             };
 
-            _doorHistoryService.InsertHistory(insertDoorHistoryServiceRequest);
+            await _doorHistoryService.InsertHistory(insertDoorHistoryServiceRequest);
         }
 
     }

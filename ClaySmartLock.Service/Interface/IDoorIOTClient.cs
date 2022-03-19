@@ -9,7 +9,7 @@ namespace ClaySmartLock.Service.Interface
 {
     public interface IDoorIOTClient
     {
-        DoorIOTClientLockResponse LockDoor(DoorIOTClientLockRequest request);
-        DoorIOTClientUnLockResponse UnLockDoor(DoorIOTClientUnLockRequest request);
+        Task<DoorIOTClientLockResponse> LockDoor(DoorIOTClientLockRequest request);
+        Task<DoorIOTClientUnLockResponse> UnLockDoor(DoorIOTClientUnLockRequest request);
     }
 }

@@ -1,10 +1,11 @@
 ﻿using ClaySmartLock.Model.Service.Door;
+using System.Threading.Tasks;
 
 namespace ClaySmartLock.Service.Interface
 {
     public interface IDoorService
     {
-        DoorUnlockServiceResponse UnLockDoor(DoorUnlockServiceRequest request);
-        DoorLockServiceResponse LockDoor(DoorLockServiceRequest request);
+        Task<DoorUnlockServiceResponse> UnLockDoor(DoorUnlockServiceRequest request);
+        Task<DoorLockServiceResponse> LockDoor(DoorLockServiceRequest request);
     }
 }

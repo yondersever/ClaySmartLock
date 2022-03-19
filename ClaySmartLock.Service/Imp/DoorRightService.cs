@@ -21,15 +21,15 @@ namespace ClaySmartLock.Service.Imp
             _userTagRepository = userTagRepository;
         }
 
-        public bool HasUserRightForDoor(long userID, long doorID)
+        public async Task<bool> HasUserRightForDoor(long userID, long doorID)
         {
-            List<UserTag> userTags = _userTagRepository.GetActiveTagsByUserID(userID).Result;
+            List<UserTag> userTags = await _userTagRepository.GetActiveTagsByUserID(userID);
 
             if (userTags.Count == 0)
                 return false;
 
 
-            List<DoorRight> doorRights = _doorRightRepository.GetActiveRightsByTagsAndDoorID(userTags.Select(e => e.ID).ToList(), doorID).Result;
+            List<DoorRight> doorRights = await _doorRightRepository.GetActiveRightsByTagsAndDoorID(userTags.Select(e => e.ID).ToList(), doorID);
             return doorRights.Count > 0;
         }
     }

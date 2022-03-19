@@ -23,10 +23,10 @@ namespace ClaySmartLock.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<ActionResult<GetDoorHistoryResponse>> Get()
         {
             GetDoorHistoryServiceRequest serviceRequest = new GetDoorHistoryServiceRequest();
-            GetDoorHistoryServiceResponse serviceResponse = _doorHistoryService.GetDoorHistory(serviceRequest);
+            GetDoorHistoryServiceResponse serviceResponse = await _doorHistoryService.GetDoorHistory(serviceRequest);
 
             GetDoorHistoryResponse response = new GetDoorHistoryResponse
             {
@@ -37,14 +37,14 @@ namespace ClaySmartLock.Controllers
         }
 
         [HttpGet("{doorID}")]
-        public IActionResult Get(long doorID)
+        public async Task<ActionResult<GetDoorHistoryResponse>> Get(long doorID)
         {
             GetDoorHistoryServiceRequest serviceRequest = new GetDoorHistoryServiceRequest()
             {
                 DoorID = doorID
             };
 
-            GetDoorHistoryServiceResponse serviceResponse = _doorHistoryService.GetDoorHistory(serviceRequest);
+            GetDoorHistoryServiceResponse serviceResponse = await _doorHistoryService.GetDoorHistory(serviceRequest);
 
             GetDoorHistoryResponse response = new GetDoorHistoryResponse
             {

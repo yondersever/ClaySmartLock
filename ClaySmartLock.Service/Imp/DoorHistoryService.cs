@@ -24,7 +24,7 @@ namespace ClaySmartLock.Service.Imp
             _mapper = mapper;
         }
 
-        public GetDoorHistoryServiceResponse GetDoorHistory(GetDoorHistoryServiceRequest request)
+        public async Task<GetDoorHistoryServiceResponse> GetDoorHistory(GetDoorHistoryServiceRequest request)
         {
             GetDoorHistoryServiceResponse response = new GetDoorHistoryServiceResponse();
 
@@ -33,11 +33,11 @@ namespace ClaySmartLock.Service.Imp
 
             if (doorID == 0)
             {
-                doorHistory = _doorHistoryRepository.GetAll().Result;
+                doorHistory = await _doorHistoryRepository.GetAll();
             }
             else
             {
-                doorHistory = _doorHistoryRepository.GetByDoorID(doorID).Result;
+                doorHistory = await _doorHistoryRepository.GetByDoorID(doorID);
             }
 
             response.History = _mapper.Map<List<DoorHistoryDTO>>(doorHistory);
@@ -45,7 +45,7 @@ namespace ClaySmartLock.Service.Imp
             return response;
         }
 
-        public void InsertHistory(InsertDoorHistoryServiceRequest request)
+        public async Task<DoorHistoryDTO> InsertHistory(InsertDoorHistoryServiceRequest request)
         {
             DoorHistory doorHistory = new DoorHistory()
             {
@@ -55,7 +55,9 @@ namespace ClaySmartLock.Service.Imp
                 UserID = request.UserID
             };
 
-            _doorHistoryRepository.Add(doorHistory);
+            doorHistory = await _doorHistoryRepository.Add(doorHistory);
+
+            return _mapper.Map<DoorHistoryDTO>(doorHistory);
         }
     }
 }
