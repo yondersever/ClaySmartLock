@@ -7,11 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-
+using ClaySmartLock.DataAccess.Repository.Interface;
 
 namespace ClaySmartLock.DataAccess.Repository.Imp
 {
-    public class DoorRightRepository : CoreRepository<DoorRight, ClaySmartLockDBContext>
+    public class DoorRightRepository : CoreRepository<DoorRight, ClaySmartLockDBContext>, IDoorRightRepository
     {
         public DoorRightRepository(ClaySmartLockDBContext context) : base(context)
         {

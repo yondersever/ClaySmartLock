@@ -16,6 +16,8 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ClaySmartLock.Service.Interface;
 using ClaySmartLock.Service.Imp;
+using ClaySmartLock.DataAccess.Repository.Imp;
+using ClaySmartLock.DataAccess.Repository.Interface;
 
 namespace ClaySmartLock
 {
@@ -31,12 +33,22 @@ namespace ClaySmartLock
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAutoMapper(typeof(Startup));
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddDbContext<ClaySmartLockDBContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("ClayDBConnection")));
 
-            services.AddScoped<IUserService, UserService>();
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IDoorHistoryService, DoorHistoryService>();
+            services.AddTransient<IDoorService, DoorService>();
+            services.AddTransient<IDoorIOTClient, DoorIOTClient>();
+            services.AddTransient<IDoorRightService, DoorRightService>();
+
+            services.AddTransient<IDoorHistoryRepository, DoorHistoryRepository>();
+            services.AddTransient<IDoorRepository, DoorRepository>();
+            services.AddTransient<IDoorRightRepository, DoorRightRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IUserTagRepository, UserTagRepository>();
 
             services.AddControllers();
 

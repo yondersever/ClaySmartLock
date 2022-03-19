@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ClaySmartLock.DataAccess.Entity;
 using ClaySmartLock.DataAccess.Repository.Imp;
+using ClaySmartLock.DataAccess.Repository.Interface;
 using ClaySmartLock.Model.DTO;
 using ClaySmartLock.Model.Service.DoorHistory;
 using ClaySmartLock.Service.Interface;
@@ -14,10 +15,10 @@ namespace ClaySmartLock.Service.Imp
 {
     public class DoorHistoryService : IDoorHistoryService
     {
-        private readonly DoorHistoryRepository _doorHistoryRepository;
+        private readonly IDoorHistoryRepository _doorHistoryRepository;
         private readonly IMapper _mapper;
 
-        public DoorHistoryService(DoorHistoryRepository doorHistoryRepository, IMapper mapper)
+        public DoorHistoryService(IDoorHistoryRepository doorHistoryRepository, IMapper mapper)
         {
             _doorHistoryRepository = doorHistoryRepository;
             _mapper = mapper;
@@ -46,10 +47,13 @@ namespace ClaySmartLock.Service.Imp
 
         public void InsertHistory(InsertDoorHistoryServiceRequest request)
         {
-            DoorHistory doorHistory = new DoorHistory();
-            doorHistory.ActionDate = DateTime.Now;
-            doorHistory.ActionType = request.Action.GetHashCode();
-            doorHistory.DoorID = request.DoorID;
+            DoorHistory doorHistory = new DoorHistory()
+            {
+                ActionDate = DateTime.Now,
+                ActionType = request.Action.GetHashCode(),
+                DoorID = request.DoorID,
+                UserID = request.UserID
+            };
 
             _doorHistoryRepository.Add(doorHistory);
         }

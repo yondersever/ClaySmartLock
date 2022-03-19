@@ -1,5 +1,6 @@
 ﻿using ClaySmartLock.DataAccess.Context;
 using ClaySmartLock.DataAccess.Entity;
+using ClaySmartLock.DataAccess.Repository.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ClaySmartLock.DataAccess.Repository.Imp
 {
-    public class UserRepository : CoreRepository<User, ClaySmartLockDBContext>
+    public class UserRepository : CoreRepository<User, ClaySmartLockDBContext>, IUserRepository
     {
         public UserRepository(ClaySmartLockDBContext context) : base(context)
         {

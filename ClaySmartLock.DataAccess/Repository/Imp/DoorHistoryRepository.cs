@@ -1,5 +1,6 @@
 ﻿using ClaySmartLock.DataAccess.Context;
 using ClaySmartLock.DataAccess.Entity;
+using ClaySmartLock.DataAccess.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ClaySmartLock.DataAccess.Repository.Imp
 {
-    public class DoorHistoryRepository : CoreRepository<DoorHistory, ClaySmartLockDBContext>
+    public class DoorHistoryRepository : CoreRepository<DoorHistory, ClaySmartLockDBContext>, IDoorHistoryRepository
     {
         public DoorHistoryRepository(ClaySmartLockDBContext context) : base(context)
         {

@@ -23,7 +23,7 @@ namespace ClaySmartLock.Controllers
         }
 
         [HttpGet]
-        public GetDoorHistoryResponse Get()
+        public IActionResult Get()
         {
             GetDoorHistoryServiceRequest serviceRequest = new GetDoorHistoryServiceRequest();
             GetDoorHistoryServiceResponse serviceResponse = _doorHistoryService.GetDoorHistory(serviceRequest);
@@ -33,11 +33,11 @@ namespace ClaySmartLock.Controllers
                 History = serviceResponse.History
             };
 
-            return response;
+            return Ok(response);
         }
 
         [HttpGet("{doorID}")]
-        public GetDoorHistoryResponse Get(long doorID)
+        public IActionResult Get(long doorID)
         {
             GetDoorHistoryServiceRequest serviceRequest = new GetDoorHistoryServiceRequest()
             {
@@ -51,7 +51,7 @@ namespace ClaySmartLock.Controllers
                 History = serviceResponse.History
             };
 
-            return response;
+            return Ok(response);
         }
     }
 }

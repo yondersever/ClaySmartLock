@@ -1,5 +1,6 @@
 ﻿using ClaySmartLock.DataAccess.Entity;
 using ClaySmartLock.DataAccess.Repository.Imp;
+using ClaySmartLock.DataAccess.Repository.Interface;
 using ClaySmartLock.Service.Interface;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,10 @@ namespace ClaySmartLock.Service.Imp
 {
     public class DoorRightService : IDoorRightService
     {
-        private readonly DoorRightRepository _doorRightRepository;
-        private readonly UserTagRepository _userTagRepository;
+        private readonly IDoorRightRepository _doorRightRepository;
+        private readonly IUserTagRepository _userTagRepository;
 
-        public DoorRightService(DoorRightRepository doorRightRepository, UserTagRepository userTagRepository)
+        public DoorRightService(IDoorRightRepository doorRightRepository, IUserTagRepository userTagRepository)
         {
             _doorRightRepository = doorRightRepository;
             _userTagRepository = userTagRepository;
