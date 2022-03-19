@@ -18,7 +18,6 @@ namespace ClaySmartLock.Controllers
         {
             DoorIOTClientUnLockResponse response = new DoorIOTClientUnLockResponse();
             response.Message = "OK";
-            throw new NullReferenceException("opss");
             return Ok(response);
         }
 
