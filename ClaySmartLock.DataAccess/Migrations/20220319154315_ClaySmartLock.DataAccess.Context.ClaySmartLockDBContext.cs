@@ -63,7 +63,8 @@ namespace ClaySmartLock.DataAccess.Migrations
                     Username = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Surname = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Status = table.Column<int>(type: "int", nullable: false)
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -84,6 +85,13 @@ namespace ClaySmartLock.DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_UserTags", x => x.ID);
                 });
+
+
+            migrationBuilder.Sql("insert into Doors (Name, Description, Status) Values ('Tunnel', 'Tunnel', 1);");
+            migrationBuilder.Sql("insert into Doors (Name, Description, Status) Values ('Office', 'Enterance of Office', 1);");
+            migrationBuilder.Sql("insert into Users (Username, Name, Surname, Status, Password) values ('yondersever', 'Yusuf','Ondersever', 1, 'ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413');");
+            migrationBuilder.Sql("insert into UserTags (UserID, Tag, Status) values (1, '1231233122312', 1);");
+            migrationBuilder.Sql("insert into DoorRights (TagID, DoorID, Status) values (1, 1, 1);");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
