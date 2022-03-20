@@ -32,7 +32,7 @@ namespace ClaySmartLock.Test.Service
                 new DoorHistory{ ActionDate = DateTime.Now, ActionType = 1, DoorID = 2, ID = 3, UserID = 1},
             };
 
-            doorHistoryRepository.Setup(e => e.GetAll()).Returns(Task.FromResult(doorHistoryList));
+            doorHistoryRepository.Setup(e => e.GetAllByChilds()).Returns(Task.FromResult(doorHistoryList));
             doorHistoryRepository.Setup(e => e.GetByDoorID(1)).Returns(Task.FromResult(doorHistoryList.Where(i => i.DoorID == 1).ToList()));
             doorHistoryRepository.Setup(e => e.GetByDoorID(3)).Returns(Task.FromResult(new List<DoorHistory>()));
             doorHistoryRepository.Setup(e => e.Add(It.IsAny<DoorHistory>())).Returns(Task.FromResult(new DoorHistory()));
