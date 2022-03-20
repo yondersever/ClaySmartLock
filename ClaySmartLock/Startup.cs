@@ -18,6 +18,7 @@ using ClaySmartLock.Service.Interface;
 using ClaySmartLock.Service.Imp;
 using ClaySmartLock.DataAccess.Repository.Imp;
 using ClaySmartLock.DataAccess.Repository.Interface;
+using ClaySmartLock.Model.Configuration;
 
 namespace ClaySmartLock
 {
@@ -37,6 +38,8 @@ namespace ClaySmartLock
 
             services.AddDbContext<ClaySmartLockDBContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("ClayDBConnection")));
+
+            services.Configure<ClayAppConfiguration>(Configuration.GetSection("ClayAppConfiguration"));
 
             services.AddHttpContextAccessor();
 

@@ -12,6 +12,9 @@ namespace ClaySmartLock.Service.Imp
     {
         public string HashBySha512(string value)
         {
+            if (value == null)
+                return null;
+
             using (var algorithm = SHA512.Create())
             {
                 var hashedBytes = algorithm.ComputeHash(Encoding.UTF8.GetBytes(value));

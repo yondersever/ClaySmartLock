@@ -1,7 +1,9 @@
-﻿using ClaySmartLock.Service.Interface;
+﻿using ClaySmartLock.Model.Configuration;
+using ClaySmartLock.Service.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -15,10 +17,10 @@ namespace ClaySmartLock.Service.Imp
     public class JwtMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly IConfiguration _configuration;
+        private readonly IOptions<ClayAppConfiguration> _configuration;
         private readonly ILogger _logger;
 
-        public JwtMiddleware(RequestDelegate next, IConfiguration configuration, ILogger<JwtMiddleware> logger)
+        public JwtMiddleware(RequestDelegate next, IOptions<ClayAppConfiguration> configuration, ILogger<JwtMiddleware> logger)
         {
             _next = next;
             _configuration = configuration;
@@ -40,7 +42,7 @@ namespace ClaySmartLock.Service.Imp
             try
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes(_configuration.GetSection("Authentication").GetSection("TokenSecret").Value);
+                var key = Encoding.ASCII.GetBytes(_configuration.Value.Authentication.TokenSecret);
                 tokenHandler.ValidateToken(token, new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,

@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using ClaySmartLock.DataAccess.Entity;
 using ClaySmartLock.DataAccess.Repository.Interface;
+using ClaySmartLock.Model.Configuration;
 using ClaySmartLock.Model.Constant;
 using ClaySmartLock.Model.DTO;
 using ClaySmartLock.Model.Service.User;
 using ClaySmartLock.Service.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -22,11 +24,11 @@ namespace ClaySmartLock.Service.Imp
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
-        private readonly IConfiguration _configuration;
+        private readonly IOptions<ClayAppConfiguration> _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IHashService _hashService;
 
-        public UserService(IUserRepository userRepository, IMapper mapper, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IHashService hashService)
+        public UserService(IUserRepository userRepository, IMapper mapper, IOptions<ClayAppConfiguration> configuration, IHttpContextAccessor httpContextAccessor, IHashService hashService)
         {
             _userRepository = userRepository;
             _mapper = mapper;
@@ -67,12 +69,12 @@ namespace ClaySmartLock.Service.Imp
         private string GenerateJwtToken(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration.GetSection("Authentication").GetSection("TokenSecret").Value);
+            var key = Encoding.ASCII.GetBytes(_configuration.Value.Authentication.TokenSecret);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[] { new Claim("id", user.ID.ToString()) }),
-                Expires = DateTime.UtcNow.AddSeconds(Convert.ToDouble(_configuration.GetSection("Authentication").GetSection("TokenExpirationSeconds").Value)),
+                Expires = DateTime.UtcNow.AddSeconds(_configuration.Value.Authentication.TokenExpirationSeconds),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
