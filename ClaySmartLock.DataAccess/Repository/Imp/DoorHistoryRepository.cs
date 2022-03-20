@@ -16,9 +16,14 @@ namespace ClaySmartLock.DataAccess.Repository.Imp
         {
         }
 
+        public async Task<List<DoorHistory>> GetAllByChilds()
+        {
+            return await context.Set<DoorHistory>().Include(e => e.Door).ToListAsync();
+        }
+
         public async Task<List<DoorHistory>> GetByDoorID(long doorID)
         {
-            return await context.Set<DoorHistory>().Where(e => e.DoorID == doorID).ToListAsync();
+            return await context.Set<DoorHistory>().Where(e => e.DoorID == doorID).Include(e => e.Door).ToListAsync();
         }
     }
 }

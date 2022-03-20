@@ -10,5 +10,6 @@ namespace ClaySmartLock.DataAccess.Repository.Interface
     public interface IDoorHistoryRepository : IRepository<DoorHistory>
     {
         Task<List<DoorHistory>> GetByDoorID(long doorID);
+        Task<List<DoorHistory>> GetAllByChilds();
     }
 }

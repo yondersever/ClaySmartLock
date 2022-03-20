@@ -33,7 +33,7 @@ namespace ClaySmartLock.Service.Imp
 
             if (doorID == 0)
             {
-                doorHistory = await _doorHistoryRepository.GetAll();
+                doorHistory = await _doorHistoryRepository.GetAllByChilds();
             }
             else
             {

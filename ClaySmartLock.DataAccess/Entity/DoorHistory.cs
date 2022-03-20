@@ -17,5 +17,11 @@ namespace ClaySmartLock.DataAccess.Entity
         public DateTime ActionDate { get; set; }
         public int ActionType { get; set; }
         public int Source { get; set; }
+
+        [ForeignKey("UserID")]
+        public User User { get; set; }
+
+        [ForeignKey("DoorID")]
+        public Door Door { get; set; }
     }
 }
