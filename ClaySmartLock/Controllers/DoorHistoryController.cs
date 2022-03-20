@@ -1,6 +1,8 @@
 ﻿using ClaySmartLock.Model.Contract.DoorHistory;
 using ClaySmartLock.Model.Service.DoorHistory;
+using ClaySmartLock.Service.Attributes;
 using ClaySmartLock.Service.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -22,6 +24,7 @@ namespace ClaySmartLock.Controllers
             _doorHistoryService = doorHistoryService;
         }
 
+        [ClayAuthorize]
         [HttpGet]
         public async Task<ActionResult<GetDoorHistoryResponse>> Get()
         {
@@ -36,6 +39,7 @@ namespace ClaySmartLock.Controllers
             return Ok(response);
         }
 
+        [ClayAuthorize]
         [HttpGet("{doorID}")]
         public async Task<ActionResult<GetDoorHistoryResponse>> Get(long doorID)
         {

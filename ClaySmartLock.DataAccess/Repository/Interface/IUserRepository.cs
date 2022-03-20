@@ -9,5 +9,6 @@ namespace ClaySmartLock.DataAccess.Repository.Interface
 {
     public interface IUserRepository : IRepository<User>
     {
+        Task<User> GetByUserNameAndPassword(string userName, string password);
     }
 }

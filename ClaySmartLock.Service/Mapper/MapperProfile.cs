@@ -15,6 +15,7 @@ namespace ClaySmartLock.Service.Mapper
         {
             CreateMap<Door, DoorDTO>();
             CreateMap<DoorHistory, DoorHistoryDTO>();
+            CreateMap<User, UserInfoDTO>();
         }
     }
 }

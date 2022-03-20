@@ -1,6 +1,8 @@
 ﻿using ClaySmartLock.Model.Contract;
 using ClaySmartLock.Model.Service.Door;
+using ClaySmartLock.Service.Attributes;
 using ClaySmartLock.Service.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -28,7 +30,7 @@ namespace ClaySmartLock.Controllers
             _doorRightService = doorRightService;
         }
 
-
+        [ClayAuthorize]
         [HttpPost("unlock")]
         public async Task<ActionResult<DoorUnLockResponse>> UnLock([FromBody] DoorUnLockRequest request)
         {
@@ -51,6 +53,7 @@ namespace ClaySmartLock.Controllers
             return Ok(response);
         }
 
+        [ClayAuthorize]
         [HttpPost("lock")]
         public async Task<ActionResult<DoorLockResponse>> Lock([FromBody] DoorUnLockRequest request)
         {

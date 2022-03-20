@@ -38,17 +38,20 @@ namespace ClaySmartLock
             services.AddDbContext<ClaySmartLockDBContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("ClayDBConnection")));
 
-            services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IDoorHistoryService, DoorHistoryService>();
-            services.AddTransient<IDoorService, DoorService>();
-            services.AddTransient<IDoorIOTClient, DoorIOTClient>();
-            services.AddTransient<IDoorRightService, DoorRightService>();
+            services.AddHttpContextAccessor();
 
-            services.AddTransient<IDoorHistoryRepository, DoorHistoryRepository>();
-            services.AddTransient<IDoorRepository, DoorRepository>();
-            services.AddTransient<IDoorRightRepository, DoorRightRepository>();
-            services.AddTransient<IUserRepository, UserRepository>();
-            services.AddTransient<IUserTagRepository, UserTagRepository>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IDoorHistoryService, DoorHistoryService>();
+            services.AddScoped<IDoorService, DoorService>();
+            services.AddScoped<IDoorIOTClient, DoorIOTClient>();
+            services.AddScoped<IDoorRightService, DoorRightService>();
+
+            services.AddScoped<IDoorHistoryRepository, DoorHistoryRepository>();
+            services.AddScoped<IDoorRepository, DoorRepository>();
+            services.AddScoped<IDoorRightRepository, DoorRightRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserTagRepository, UserTagRepository>();
+            services.AddScoped<IHashService, HashService>();
 
             services.AddControllers();
 
@@ -63,7 +66,7 @@ namespace ClaySmartLock
         {
             if (env.IsDevelopment())
             {
-                //app.UseDeveloperExceptionPage();
+                app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ClaySmartLock v1"));
             }
@@ -73,6 +76,8 @@ namespace ClaySmartLock
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseMiddleware<JwtMiddleware>();
 
             app.UseAuthorization();
 
